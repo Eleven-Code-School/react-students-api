@@ -6,7 +6,7 @@
   "description": "REST API with Node + Express + MongoDB (Mongoose), deployable on Vercel (serverless).",
   "scripts": {
     "dev": "nodemon api/local.js",
-    "start": "node api/local.js"
+    "start": "node api/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
