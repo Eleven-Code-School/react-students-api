@@ -1,0 +1,19 @@
+{
+    "eslint.useFlatConfig": true,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "always",
+        "source.fixAll.eslint": "always"
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "css.lint.unknownAtRules": "ignore",
+    "prettier.requireConfig": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "javascript.suggest.autoImports": true,
+    "typescript.suggest.autoImports": true
+}
