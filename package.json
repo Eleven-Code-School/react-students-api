@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
     "express": "^4.21.1",
     "mongoose": "^8.6.1",
-    "nodemon": "^3.1.10",
     "serverless-http": "^3.2.0",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.1",
+    "nodemon": "^3.1.10"
   }
 }
