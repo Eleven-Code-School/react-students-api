@@ -1,10 +1,11 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 
-import productsRouter from "./routes/products.js";
-import usersRouter from "./routes/users.js";
+import authRouter from "./routes/auth.js";
 import cartsRouter from "./routes/carts.js";
 import preferencesRouter from "./routes/preferences.js";
+import productsRouter from "./routes/products.js";
+import usersRouter from "./routes/users.js";
 
 import { connectMongo } from "./_lib/mongo.js";
 import { seedIfNeeded } from "./_lib/seed.js";
@@ -29,7 +30,7 @@ app.use(async (req, res, next) => {
 app.get("/api", (req, res) => {
     res.json({
         status: "ok",
-        name: "vercel-express-rest-api-mongo",
+        name: "Eleven Code - React Students API",
         version: "1.1.0",
         time: new Date().toISOString(),
     });
@@ -39,6 +40,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/preferences", preferencesRouter);
+app.use("/api/auth", authRouter);
 
 // 404
 app.use((req, res) => {

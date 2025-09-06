@@ -17,6 +17,22 @@ export const UserSchema = z.object({
     role: z.enum(["user", "admin"]).default("user"),
 });
 
+export const RegisterDTO = z
+    .object({
+        name: z.string(),
+        email: z.string().email(),
+        password: z.string().min(6),
+        role: z.enum(["user", "admin"]).optional(),
+    })
+    .passthrough();
+
+export const LoginDTO = z
+    .object({
+        email: z.string().email(),
+        password: z.string().min(6),
+    })
+    .passthrough();
+
 export const PreferencesSchema = z
     .object({
         userId: z.string().optional(),
