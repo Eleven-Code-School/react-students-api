@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
     if (sort === "price") sortObj.price = 1;
     if (sort === "rating") sortObj.rating = -1;
 
-    const items = await Product.find(query).sort(sortObj).lean();
+    const items = await Product.find(query).sort(sortObj);
 
     res.json(items);
 });
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-    const item = await Product.findById(req.params.id).lean();
+    const item = await Product.findById(req.params.id);
     if (!item) return res.status(404).json({ error: "Product not found" });
     res.json(item);
 });
@@ -46,13 +46,13 @@ router.patch("/:id", async (req, res) => {
         req.params.id,
         { $set: parsed.data },
         { new: true, runValidators: true }
-    ).lean();
+    );
     if (!updated) return res.status(404).json({ error: "Product not found" });
     res.json(updated);
 });
 
 router.delete("/:id", async (req, res) => {
-    const deleted = await Product.findByIdAndDelete(req.params.id).lean();
+    const deleted = await Product.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Product not found" });
     res.json({ ok: true, removed: deleted });
 });

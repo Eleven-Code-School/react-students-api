@@ -5,15 +5,13 @@ import User from "../models/User.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    const items = await User.find().lean();
-    items.forEach((item) => delete item.password);
+    const items = await User.find();
     res.json(items);
 });
 
 router.get("/:id", async (req, res) => {
-    const item = await User.findById(req.params.id).lean();
+    const item = await User.findById(req.params.id);
     if (!item) return res.status(404).json({ error: "User not found" });
-    delete item.password;
     res.json(item);
 });
 
@@ -25,13 +23,13 @@ router.patch("/:id", async (req, res) => {
         req.params.id,
         { $set: parsed.data },
         { new: true, runValidators: true }
-    ).lean();
+    );
     if (!updated) return res.status(404).json({ error: "User not found" });
     res.json(updated);
 });
 
 router.delete("/:id", async (req, res) => {
-    const deleted = await User.findByIdAndDelete(req.params.id).lean();
+    const deleted = await User.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ error: "User not found" });
     res.json({ ok: true, removed: deleted });
 });

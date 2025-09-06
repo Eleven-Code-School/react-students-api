@@ -11,7 +11,17 @@ const ProductSchema = new mongoose.Schema(
         rating: Number,
         image: String,
     },
-    { timestamps: true },
+    {
+        timestamps: true,
+        toJSON: {
+            transform: function (doc, ret) {
+                ret.id = ret._id;
+                delete ret._id;
+                delete ret.__v;
+                return ret;
+            },
+        },
+    }
 );
 
 export default mongoose.models.Product || mongoose.model("Product", ProductSchema);

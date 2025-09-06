@@ -16,12 +16,12 @@ router.get("/", async (req, res) => {
     const { status } = req.query;
     const query = {};
     if (status) query.status = status;
-    const items = await Cart.find(query).lean();
+    const items = await Cart.find(query);
     res.json(items);
 });
 
 router.get("/:id", async (req, res) => {
-    const cart = await Cart.findById(req.params.id).lean();
+    const cart = await Cart.findById(req.params.id);
     if (!cart) return res.status(404).json({ error: "Cart not found" });
     res.json(cart);
 });
@@ -33,7 +33,7 @@ router.post("/:id/items", async (req, res) => {
     const cart = await Cart.findById(req.params.id);
     if (!cart) return res.status(404).json({ error: "Cart not found" });
 
-    const product = await Product.findById(parsed.data.productId).lean();
+    const product = await Product.findById(parsed.data.productId);
     if (!product) return res.status(400).json({ error: "Product does not exist" });
 
     const existing = cart.items.find((i) => String(i.productId) === String(parsed.data.productId));
@@ -76,7 +76,7 @@ router.delete("/:id/items/:productId", async (req, res) => {
 });
 
 router.get("/:id/summary", async (req, res) => {
-    const cart = await Cart.findById(req.params.id).lean();
+    const cart = await Cart.findById(req.params.id);
     if (!cart) return res.status(404).json({ error: "Cart not found" });
     const subtotal = cart.items.reduce((acc, i) => acc + i.priceSnapshot * i.qty, 0);
     const taxRate = 0.21;
