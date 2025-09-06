@@ -1,7 +1,6 @@
 import express from "express";
-import { PreferencesSchema, UserSchema } from "../_lib/schemas.js";
+import { UserSchema } from "../_lib/schemas.js";
 import User from "../models/User.js";
-import UserPreferences from "../models/UserPreferences.js";
 
 const router = express.Router();
 
@@ -35,25 +34,6 @@ router.delete("/:id", async (req, res) => {
     const deleted = await User.findByIdAndDelete(req.params.id).lean();
     if (!deleted) return res.status(404).json({ error: "User not found" });
     res.json({ ok: true, removed: deleted });
-});
-
-// Preferences for a specific user
-router.get("/:id/preferences", async (req, res) => {
-    const pref = await UserPreferences.findOne({ userId: req.params.id }).lean();
-    if (!pref) return res.status(404).json({ error: "Preferences not found for user" });
-    res.json(pref);
-});
-
-router.patch("/:id/preferences", async (req, res) => {
-    const parsed = PreferencesSchema.partial().safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
-
-    const updated = await UserPreferences.findOneAndUpdate(
-        { userId: req.params.id },
-        { $set: parsed.data },
-        { new: true, upsert: true }
-    ).lean();
-    res.json(updated);
 });
 
 export default router;

@@ -6,7 +6,7 @@ Incluye modelos y endpoints para **productos**, **usuarios**, **carritos** y **p
 ## 🎯 Características
 
 -   Conexión a Mongo con **pooling/caching** para serverless (`api/_lib/mongo.js`).
--   Modelos Mongoose: `Product`, `User`, `UserPreferences`, `Cart`.
+-   Modelos Mongoose: `Product`, `User`, `Cart`.
 -   Validación de entrada con **Zod** en los controladores.
 -   Endpoints REST con CRUD y operaciones de carrito.
 
@@ -52,14 +52,6 @@ pnpm dev
 -   `GET    /api/users` -> listar
 -   `GET    /api/users/:id` -> detalle
 -   `DELETE /api/users/:id` -> eliminar
--   `PATCH  /api/auth/:id/preferences` -> actualizar preferencias del usuario
--   `GET    /api/users/:id/preferences` -> leer preferencias del usuario
-
--   `GET    /api/preferences` -> listar todas
--   `POST   /api/preferences` -> crear
--   `GET    /api/preferences/:id` -> detalle
--   `PATCH  /api/preferences/:id` -> actualizar
--   `DELETE /api/preferences/:id` -> eliminar
 
 -   `POST   /api/carts` -> crear carrito (opcional `userId`)
 -   `GET    /api/carts` -> listar (?status=active|ordered)

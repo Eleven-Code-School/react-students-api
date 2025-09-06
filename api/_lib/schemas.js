@@ -33,25 +33,6 @@ export const LoginDTO = z
     })
     .passthrough();
 
-export const PreferencesSchema = z
-    .object({
-        userId: z.string().optional(),
-        currency: z.enum(["EUR", "USD"]).default("EUR"),
-        language: z.enum(["es", "en"]).default("es"),
-        theme: z.enum(["light", "dark", "system"]).default("system"),
-        notifications: z
-            .object({
-                email: z.boolean().default(true),
-                sms: z.boolean().default(false),
-            })
-            .default({ email: true, sms: false }),
-        marketingOptIn: z.boolean().default(false),
-    })
-    .transform((d) => ({
-        ...d,
-        notifications: d.notifications ?? { email: true, sms: false },
-    }));
-
 export const CartItemSchema = z.object({
     productId: z.string(),
     qty: z.number().int().positive(),

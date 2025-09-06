@@ -1,6 +1,5 @@
 import Product from "../models/Product.js";
 import User from "../models/User.js";
-import UserPreferences from "../models/UserPreferences.js";
 
 export async function seedIfNeeded() {
     if (process.env.SEED !== "true") return;
@@ -43,15 +42,6 @@ export async function seedIfNeeded() {
     ]);
 
     const user = await User.create({ name: "Grace Hopper", email: "grace@example.com", role: "user" });
-
-    await UserPreferences.create({
-        userId: user._id,
-        currency: "EUR",
-        language: "es",
-        theme: "system",
-        notifications: { email: true, sms: false },
-        marketingOptIn: false,
-    });
 
     console.log("[seed] Insertados productos y usuario de ejemplo.");
 }

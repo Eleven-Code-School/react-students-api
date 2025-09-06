@@ -3,7 +3,6 @@ import express from "express";
 import { authRequired, hashPassword, signToken, verifyPassword } from "../_lib/auth.js";
 import { LoginDTO, RegisterDTO } from "../_lib/schemas.js";
 import User from "../models/User.js";
-import UserPreferences from "../models/UserPreferences.js";
 
 const router = express.Router();
 
@@ -18,21 +17,13 @@ router.post("/register", async (req, res) => {
     if (exists) return res.status(409).json({ error: "Email already exists" });
 
     const passwordHash = await hashPassword(password);
-    const user = await User.create({ name, email, role: role || "user", password: passwordHash });
-
-    // preferencias por defecto (idempotente)
-    const defaults = {
-        currency: "EUR",
-        language: "es",
-        theme: "system",
-        notifications: { email: true, sms: false },
-        marketingOptIn: false,
-    };
-    await UserPreferences.findOneAndUpdate(
-        { userId: user._id },
-        { $setOnInsert: { userId: user._id, ...defaults } },
-        { upsert: true, new: true }
-    );
+    const user = await User.create({
+        ...parsed.data,
+        name,
+        email,
+        role: role || "user",
+        password: passwordHash,
+    });
 
     const token = signToken({ sub: user._id.toString(), role: user.role });
     res.status(201).json({ token, user });

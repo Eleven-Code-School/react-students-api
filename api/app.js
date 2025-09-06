@@ -3,7 +3,6 @@ import express from "express";
 
 import authRouter from "./routes/auth.js";
 import cartsRouter from "./routes/carts.js";
-import preferencesRouter from "./routes/preferences.js";
 import productsRouter from "./routes/products.js";
 import usersRouter from "./routes/users.js";
 
@@ -39,7 +38,6 @@ app.get("/api", (req, res) => {
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/carts", cartsRouter);
-app.use("/api/preferences", preferencesRouter);
 app.use("/api/auth", authRouter);
 
 // 404
