@@ -5,7 +5,7 @@ import Product from "../models/Product.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    const { search = "", page = 1, limit = 20, categoryId, sort } = req.query;
+    const { search = "", categoryId, sort } = req.query;
     const query = {};
 
     if (search) {
@@ -16,20 +16,13 @@ router.get("/", async (req, res) => {
     }
     if (categoryId) query.categoryId = categoryId;
 
-    const pageNum = Number(page) || 1;
-    const limitNum = Math.min(100, Number(limit) || 20);
-    const skip = (pageNum - 1) * limitNum;
-
     const sortObj = {};
     if (sort === "price") sortObj.price = 1;
     if (sort === "rating") sortObj.rating = -1;
 
-    const [items, total] = await Promise.all([
-        Product.find(query).sort(sortObj).skip(skip).limit(limitNum).lean(),
-        Product.countDocuments(query),
-    ]);
+    const items = await Product.find(query).sort(sortObj).lean();
 
-    res.json({ items, total, page: pageNum, limit: limitNum });
+    res.json(items);
 });
 
 router.post("/", async (req, res) => {

@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     const items = await User.find().lean();
     items.forEach((item) => delete item.password);
-    res.json({ items, total: items.length });
+    res.json(items);
 });
 
 router.get("/:id", async (req, res) => {

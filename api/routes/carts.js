@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
     const query = {};
     if (status) query.status = status;
     const items = await Cart.find(query).lean();
-    res.json({ items, total: items.length });
+    res.json(items);
 });
 
 router.get("/:id", async (req, res) => {
