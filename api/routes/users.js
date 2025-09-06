@@ -7,47 +7,21 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     const items = await User.find().lean();
+    items.forEach((item) => delete item.password);
     res.json({ items, total: items.length });
-});
-
-router.post("/", async (req, res) => {
-    const parsed = UserSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
-
-    try {
-        const created = await User.create(parsed.data);
-
-        // Crear preferencias por defecto si no existen (idempotente)
-        const defaults = {
-            currency: "EUR",
-            language: "es",
-            theme: "system",
-            notifications: { email: true, sms: false },
-            marketingOptIn: false,
-        };
-
-        await UserPreferences.findOneAndUpdate(
-            { userId: created._id },
-            { $setOnInsert: { userId: created._id, ...defaults } },
-            { upsert: true, new: true }
-        );
-
-        res.status(201).json(created);
-    } catch (e) {
-        if (e.code === 11000) return res.status(409).json({ error: "Email already exists" });
-        throw e;
-    }
 });
 
 router.get("/:id", async (req, res) => {
     const item = await User.findById(req.params.id).lean();
     if (!item) return res.status(404).json({ error: "User not found" });
+    delete item.password;
     res.json(item);
 });
 
 router.patch("/:id", async (req, res) => {
     const parsed = UserSchema.partial().safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    delete parsed.password;
     const updated = await User.findByIdAndUpdate(
         req.params.id,
         { $set: parsed.data },

@@ -18,7 +18,7 @@ router.post("/register", async (req, res) => {
     if (exists) return res.status(409).json({ error: "Email already exists" });
 
     const passwordHash = await hashPassword(password);
-    const user = await User.create({ name, email, role: role || "user", passwordHash });
+    const user = await User.create({ name, email, role: role || "user", password: passwordHash });
 
     // preferencias por defecto (idempotente)
     const defaults = {
@@ -46,9 +46,9 @@ router.post("/login", async (req, res) => {
     const { email, password } = parsed.data;
 
     const user = await User.findOne({ email });
-    if (!user || !user.passwordHash) return res.status(401).json({ error: "Invalid credentials" });
+    if (!user || !user.password) return res.status(401).json({ error: "Invalid credentials" });
 
-    const ok = await verifyPassword(password, user.passwordHash);
+    const ok = await verifyPassword(password, user.password);
     if (!ok) return res.status(401).json({ error: "Invalid credentials" });
 
     const token = signToken({ sub: user._id.toString(), role: user.role });
@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
 router.get("/me", authRequired, async (req, res) => {
     const me = await User.findById(req.user.id).lean();
     if (!me) return res.status(404).json({ error: "User not found" });
-    delete me.passwordHash;
+    delete me.password;
     res.json({ user: me });
 });
 
