@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
         await UserPreferences.findOneAndUpdate(
             { userId: created._id },
             { $setOnInsert: { userId: created._id, ...defaults } },
-            { upsert: true, new: true },
+            { upsert: true, new: true }
         );
 
         res.status(201).json(created);
@@ -51,7 +51,7 @@ router.patch("/:id", async (req, res) => {
     const updated = await User.findByIdAndUpdate(
         req.params.id,
         { $set: parsed.data },
-        { new: true, runValidators: true },
+        { new: true, runValidators: true }
     ).lean();
     if (!updated) return res.status(404).json({ error: "User not found" });
     res.json(updated);
@@ -77,7 +77,7 @@ router.patch("/:id/preferences", async (req, res) => {
     const updated = await UserPreferences.findOneAndUpdate(
         { userId: req.params.id },
         { $set: parsed.data },
-        { new: true, upsert: true },
+        { new: true, upsert: true }
     ).lean();
     res.json(updated);
 });

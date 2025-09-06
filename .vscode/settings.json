@@ -8,12 +8,16 @@
         "source.organizeImports": "always",
         "source.fixAll.eslint": "always"
     },
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/build": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/build": true
+    },
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "css.lint.unknownAtRules": "ignore",
-    "prettier.requireConfig": true,
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "javascript.suggest.autoImports": true,
-    "typescript.suggest.autoImports": true
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

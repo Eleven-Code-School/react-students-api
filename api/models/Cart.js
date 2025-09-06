@@ -13,7 +13,7 @@ const CartSchema = new mongoose.Schema(
         items: { type: [CartItemSchema], default: [] },
         orderedAt: Date,
     },
-    { timestamps: true },
+    { timestamps: true }
 );
 
 export default mongoose.models.Cart || mongoose.model("Cart", CartSchema);

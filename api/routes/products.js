@@ -1,6 +1,6 @@
 import express from "express";
-import Product from "../models/Product.js";
 import { ProductSchema } from "../_lib/schemas.js";
+import Product from "../models/Product.js";
 
 const router = express.Router();
 
@@ -9,7 +9,10 @@ router.get("/", async (req, res) => {
     const query = {};
 
     if (search) {
-        query.$or = [{ name: { $regex: search, $options: "i" } }, { description: { $regex: search, $options: "i" } }];
+        query.$or = [
+            { name: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+        ];
     }
     if (categoryId) query.categoryId = categoryId;
 
@@ -49,7 +52,7 @@ router.patch("/:id", async (req, res) => {
     const updated = await Product.findByIdAndUpdate(
         req.params.id,
         { $set: parsed.data },
-        { new: true, runValidators: true },
+        { new: true, runValidators: true }
     ).lean();
     if (!updated) return res.status(404).json({ error: "Product not found" });
     res.json(updated);

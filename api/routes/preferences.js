@@ -1,6 +1,6 @@
 import express from "express";
-import UserPreferences from "../models/UserPreferences.js";
 import { PreferencesSchema } from "../_lib/schemas.js";
+import UserPreferences from "../models/UserPreferences.js";
 
 const router = express.Router();
 
@@ -25,7 +25,11 @@ router.get("/:id", async (req, res) => {
 router.patch("/:id", async (req, res) => {
     const parsed = PreferencesSchema.partial().safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
-    const updated = await UserPreferences.findByIdAndUpdate(req.params.id, { $set: parsed.data }, { new: true }).lean();
+    const updated = await UserPreferences.findByIdAndUpdate(
+        req.params.id,
+        { $set: parsed.data },
+        { new: true }
+    ).lean();
     if (!updated) return res.status(404).json({ error: "Preferences not found" });
     res.json(updated);
 });
