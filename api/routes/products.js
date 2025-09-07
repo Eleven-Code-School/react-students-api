@@ -1,5 +1,5 @@
 import express from "express";
-import { ProductSchema } from "../_lib/schemas.js";
+import { ProductSchema, formatValidationError } from "../_lib/schemas.js";
 import Product from "../models/Product.js";
 
 const router = express.Router();
@@ -27,7 +27,10 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     const parsed = ProductSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if (!parsed.success) {
+        const error = formatValidationError(parsed.error);
+        return res.status(400).json({ error });
+    }
 
     const created = await Product.create(parsed.data);
     res.status(201).json(created);
@@ -41,7 +44,10 @@ router.get("/:id", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
     const parsed = ProductSchema.partial().safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if (!parsed.success) {
+        const error = formatValidationError(parsed.error);
+        return res.status(400).json({ error });
+    }
     const updated = await Product.findByIdAndUpdate(
         req.params.id,
         { $set: parsed.data },

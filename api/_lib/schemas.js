@@ -41,3 +41,36 @@ export const CartItemSchema = z.object({
 export const CartCreateSchema = z.object({
     userId: z.string().optional(),
 });
+
+// Utility function to format validation errors
+export function formatValidationError(zodError) {
+    const missingFields = [];
+    const invalidFields = [];
+
+    zodError.errors.forEach((error) => {
+        if (error.code === "invalid_type" && error.received === "undefined") {
+            missingFields.push(error.path[0]);
+        } else {
+            invalidFields.push({
+                field: error.path[0],
+                message: error.message,
+            });
+        }
+    });
+
+    const result = {};
+
+    if (missingFields.length > 0) {
+        result.missingFields = missingFields;
+        result.message = `Missing required fields: ${missingFields.join(", ")}`;
+    }
+
+    if (invalidFields.length > 0) {
+        result.invalidFields = invalidFields;
+        if (!result.message) {
+            result.message = "Validation errors occurred";
+        }
+    }
+
+    return result;
+}

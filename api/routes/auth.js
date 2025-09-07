@@ -1,7 +1,7 @@
 // api/routes/auth.js
 import express from "express";
 import { authRequired, hashPassword, signToken, verifyPassword } from "../_lib/auth.js";
-import { LoginDTO, RegisterDTO } from "../_lib/schemas.js";
+import { LoginDTO, RegisterDTO, formatValidationError } from "../_lib/schemas.js";
 import User from "../models/User.js";
 
 const router = express.Router();
@@ -9,7 +9,10 @@ const router = express.Router();
 /** POST /api/auth/register */
 router.post("/register", async (req, res) => {
     const parsed = RegisterDTO.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if (!parsed.success) {
+        const error = formatValidationError(parsed.error);
+        return res.status(400).json({ error });
+    }
 
     const { name, email, password, role } = parsed.data;
 
@@ -32,7 +35,10 @@ router.post("/register", async (req, res) => {
 /** POST /api/auth/login */
 router.post("/login", async (req, res) => {
     const parsed = LoginDTO.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if (!parsed.success) {
+        const error = formatValidationError(parsed.error);
+        return res.status(400).json({ error });
+    }
 
     const { email, password } = parsed.data;
 
@@ -52,6 +58,18 @@ router.get("/me", authRequired, async (req, res) => {
     if (!me) return res.status(404).json({ error: "User not found" });
     delete me.password;
     res.json({ user: me });
+});
+
+/** POST /api/auth/logout */
+router.post("/logout", authRequired, async (req, res) => {
+    // En una implementación con JWT stateless, el logout se maneja principalmente en el cliente
+    // eliminando el token del almacenamiento local/sessionStorage
+    // Aquí simplemente confirmamos que el logout fue exitoso
+    res.json({
+        message: "Logout successful",
+        logout: true,
+        user: req.user.id,
+    });
 });
 
 export default router;

@@ -17,7 +17,10 @@ router.get("/:id", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
     const parsed = UserSchema.partial().safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if (!parsed.success) {
+        const error = formatValidationError(parsed.error);
+        return res.status(400).json({ error });
+    }
     delete parsed.password;
     const updated = await User.findByIdAndUpdate(
         req.params.id,

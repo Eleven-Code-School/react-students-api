@@ -1,5 +1,5 @@
 import express from "express";
-import { CartCreateSchema, CartItemSchema } from "../_lib/schemas.js";
+import { CartCreateSchema, CartItemSchema, formatValidationError } from "../_lib/schemas.js";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
 
@@ -7,7 +7,10 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
     const parsed = CartCreateSchema.safeParse(req.body ?? {});
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if (!parsed.success) {
+        const error = formatValidationError(parsed.error);
+        return res.status(400).json({ error });
+    }
     const created = await Cart.create({ userId: parsed.data.userId });
     res.status(201).json(created);
 });
@@ -28,7 +31,10 @@ router.get("/:id", async (req, res) => {
 
 router.post("/:id/items", async (req, res) => {
     const parsed = CartItemSchema.safeParse(req.body);
-    if (!parsed.success) return res.status(400).json({ error: parsed.error.flatten() });
+    if (!parsed.success) {
+        const error = formatValidationError(parsed.error);
+        return res.status(400).json({ error });
+    }
 
     const cart = await Cart.findById(req.params.id);
     if (!cart) return res.status(404).json({ error: "Cart not found" });
