@@ -5,7 +5,6 @@ if (!MONGODB_URI) {
     console.warn("[mongo] MONGODB_URI no está definida. Defínela en env para conectar a la BD.");
 }
 
-// Vercel serverless: cachear conexión entre invocaciones
 let cached = global._mongoose;
 if (!cached) {
     cached = global._mongoose = { conn: null, promise: null };

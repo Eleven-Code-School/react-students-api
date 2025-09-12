@@ -22,9 +22,6 @@ router.post("/register", async (req, res) => {
     const passwordHash = await hashPassword(password);
     const user = await User.create({
         ...parsed.data,
-        name,
-        email,
-        role: role || "user",
         password: passwordHash,
     });
 

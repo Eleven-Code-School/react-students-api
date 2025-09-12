@@ -55,6 +55,8 @@ const BookSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
+        strict: false,
+        minimize: false,
         toJSON: {
             transform: function (doc, ret) {
                 ret.id = ret._id;

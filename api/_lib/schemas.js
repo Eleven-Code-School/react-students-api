@@ -14,7 +14,7 @@ export const ProductSchema = z.object({
 export const UserSchema = z.object({
     name: z.string().min(1),
     email: z.string().email(),
-    role: z.enum(["user", "admin"]).default("user"),
+    role: z.enum(["user", "admin", "editor"]).default("user"),
 });
 
 export const RegisterDTO = z
@@ -22,7 +22,7 @@ export const RegisterDTO = z
         name: z.string(),
         email: z.string().email(),
         password: z.string().min(6),
-        role: z.enum(["user", "admin"]).optional(),
+        role: z.enum(["user", "admin", "editor"]).default("user").optional(),
     })
     .passthrough();
 
